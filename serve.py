@@ -18,7 +18,7 @@ def serve():
             proc[0].terminate()
             return "stop stressing CPU"
         else:
-            proc[0] = subprocess.Popen(["stress-ng", "--cpu", "1", "--cpu-load", str(usage)])
+            proc[0] = subprocess.Popen(["stress-ng", "--cpu", "1", "--timeout", "0", "--cpu-load", str(usage)])
             hostname = socket.gethostname()
             return f"push EC2 instance {socket.gethostbyname(hostname)} to {usage}\% CPU usage"
 
