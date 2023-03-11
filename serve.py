@@ -1,18 +1,24 @@
 from flask import Flask, request
 import socket
+import subprocess
 
 app = Flask(__name__)
 
 # seed_number = [0]
+proc = None
 @app.route("/", methods=["GET", "POST"])
 def serve():
-    # if request.method == 'POST':
-    #     data = request.get_json()
-    #     print(data)
-    #     seed_number[0] = data['num']
-    #     return "success"
+    if request.method == 'POST':
+        if proc is not None:
+            proc.terminate()
+        data = request.get_json()
+        print(data)
+        usage = data['cpu_usage']
+        proc = subprocess.Popen(["stress-ng", "--cpu", "1", "--cpu-load", str(usage)])
+        hostname = socket.gethostname()
+        return f"push {socket.gethostbyname(hostname)} to {usage}"
+    
     if request.method == 'GET':
-        # return str(seed_number[0])
         hostname = socket.gethostname()
         return socket.gethostbyname(hostname)
 
