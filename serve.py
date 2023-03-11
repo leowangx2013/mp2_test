@@ -15,11 +15,12 @@ def serve():
         print(data)
         usage = data['cpu_usage']
         if int(usage) == 0:
+            proc[0].terminate()
             return "stop stressing CPU"
         else:
             proc[0] = subprocess.Popen(["stress-ng", "--cpu", "1", "--cpu-load", str(usage)])
             hostname = socket.gethostname()
-            return f"push {socket.gethostbyname(hostname)} to {usage}"
+            return f"push EC2 instance {socket.gethostbyname(hostname)} to {usage}\% CPU usage"
 
     if request.method == 'GET':
         hostname = socket.gethostname()
