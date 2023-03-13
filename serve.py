@@ -14,7 +14,7 @@ def serve():
         data = request.get_json()
         print(data)
         usage = data['cpu_usage']
-        if int(usage) == 0:
+        if int(usage) == 0 and proc[0] is not None:
             proc[0].terminate()
             return "stop stressing CPU"
         else:
